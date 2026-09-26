@@ -22,6 +22,7 @@ import {
 interface SubLayoutResult {
   entryPoint: Point;
   exitPoint: Point;
+  exitLabel?: 'true' | 'false';
   minX: number;
   maxX: number;
   minY: number;
@@ -91,6 +92,7 @@ function layoutBlockSequence(
   let maxX = centerX + 100;
   const minY = startY;
   let lastExitPoint: Point = { x: centerX, y: startY };
+  let lastExitLabel: 'true' | 'false' | undefined = undefined;
 
   if (blocks.length === 0) {
     return {
@@ -128,6 +130,9 @@ function layoutBlockSequence(
         isDownwardVertical: true,
         hasArrowHead: true,
         slot,
+        label: lastExitLabel
+          ? { text: lastExitLabel, x: p1.x + 12, y: p1.y + 16 }
+          : undefined,
       });
       slots.push(slot);
     }
@@ -142,12 +147,14 @@ function layoutBlockSequence(
     if (blockRes.maxX > maxX) maxX = blockRes.maxX;
 
     lastExitPoint = blockRes.exitPoint;
+    lastExitLabel = blockRes.exitLabel;
     currentY = blockRes.exitPoint.y + VERTICAL_GAP;
   }
 
   return {
     entryPoint: { x: centerX, y: startY },
     exitPoint: lastExitPoint,
+    exitLabel: lastExitLabel,
     minX,
     maxX,
     minY,
@@ -367,6 +374,9 @@ function layoutIfBlock(
       isDownwardVertical: true,
       hasArrowHead: true,
       slot: slotLast,
+      label: firstBlockRes?.exitLabel
+        ? { text: firstBlockRes.exitLabel, x: pExit1.x + 12, y: pExit1.y + 16 }
+        : undefined,
     });
     slots.push(slotLast);
   }
@@ -436,6 +446,13 @@ function layoutIfBlock(
       isDownwardVertical: true,
       hasArrowHead: false,
       slot: slotEnd,
+      label: falseRes?.exitLabel
+        ? {
+            text: falseRes.exitLabel,
+            x: falseX + 12,
+            y: lastFalseExitPoint.y + 16,
+          }
+        : undefined,
     });
     slots.push(slotEnd);
   }
@@ -584,6 +601,9 @@ function layoutDoWhileBlock(
       isDownwardVertical: true,
       hasArrowHead: true,
       slot: slotLast,
+      label: bodyRes.exitLabel
+        ? { text: bodyRes.exitLabel, x: centerX + 12, y: pLast1.y + 16 }
+        : undefined,
     });
     slots.push(slotLast);
   }
@@ -641,12 +661,13 @@ function layoutDoWhileBlock(
   });
 
   // False branch label on bottom exit
-  // (The arrow itself will be created by the sequence connection, but we can emit a label placeholder)
+  // (The arrow itself will be created by the sequence connection with label: 'false')
   const exitPoint: Point = { x: centerX, y: diamondBottom };
 
   return {
     entryPoint: { x: centerX, y: topY },
     exitPoint,
+    exitLabel: 'false',
     minX: Math.min(diamondX, centerX - 100),
     maxX: Math.max(loopX + 20, diamondRight),
     minY: topY,
@@ -780,6 +801,9 @@ function layoutWhileBlock(
       isDownwardVertical: true,
       hasArrowHead: false,
       slot: slotEnd,
+      label: bodyRes.exitLabel
+        ? { text: bodyRes.exitLabel, x: centerX + 12, y: pExit1.y + 16 }
+        : undefined,
     });
     slots.push(slotEnd);
   }

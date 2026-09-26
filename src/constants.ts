@@ -10,7 +10,7 @@ export const MIN_NODE_HEIGHT = 32;
 export const BASE_FONT_SIZE = 14;
 export const MIN_FONT_SIZE = 8;
 
-export const VERTICAL_GAP = 32;
+export const VERTICAL_GAP = 40;
 export const BRANCH_HORIZONTAL_GAP = 64;
 export const LOOP_BACK_GAP = 52;
 export const JUNCTION_RADIUS = 8;
