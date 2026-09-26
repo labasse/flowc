@@ -654,9 +654,6 @@ export class FlowChartApp {
         this.setZoom(1.0, window.innerWidth / 2, window.innerHeight / 2)
       );
     this.container
-      .querySelector('#btn-new-flow')
-      ?.addEventListener('click', () => this.resetToDefault());
-    this.container
       .querySelector('#btn-export-png')
       ?.addEventListener('click', () => this.exportPNG());
 
