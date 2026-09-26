@@ -1,0 +1,6 @@
+{
+  "name": "flow-c",
+  "description": "Fast, client-side flowchart editor for C applications with orthogonal routing, branch blocks, loops, undo/redo, and PNG export with embedded metadata.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
